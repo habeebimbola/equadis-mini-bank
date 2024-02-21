@@ -12,6 +12,9 @@ import java.util.Optional;
 public class BankAccountServiceImpl implements BankAccountService{
     @Autowired
     private BankAccountRepo bankAccountRepo;
+
+    @Autowired
+    private TransactionService transactionService;
     @Override
     public BankAccountDto createNewBankAccount(Double initialAmount) {
 
@@ -45,6 +48,8 @@ public class BankAccountServiceImpl implements BankAccountService{
         bankAccount.setBalance( newBalance );
         this.bankAccountRepo.save(bankAccount);
 
+        this.transactionService.createNewTransaction(amount,accountId);
+
 
         return true;
     }
@@ -62,6 +67,8 @@ public class BankAccountServiceImpl implements BankAccountService{
         bankAccount.setBalance(newBalance);
 
         this.bankAccountRepo.save(bankAccount);
+
+        this.transactionService.createNewTransaction(amount,accountId);
     }
 
     @Override
