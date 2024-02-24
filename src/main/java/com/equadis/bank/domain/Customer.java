@@ -29,8 +29,8 @@ public class Customer {
     @Column(name = "LAST_MODIFIED_DATE")
     private LocalDateTime modifiedDate;
 
-    @OneToOne(mappedBy = "id")
-    private BankAccount bankAccount;
+//    @OneToOne(mappedBy = "id")
+//    private BankAccount bankAccount;
 
 
     public Customer() {
@@ -81,13 +81,13 @@ public class Customer {
         this.modifiedDate = modifiedDate;
     }
 
-    public BankAccount getBankAccount() {
-        return bankAccount;
-    }
-
-    public void setBankAccount(BankAccount bankAccount) {
-        this.bankAccount = bankAccount;
-    }
+//    public BankAccount getBankAccount() {
+//        return bankAccount;
+//    }
+//
+//    public void setBankAccount(BankAccount bankAccount) {
+//        this.bankAccount = bankAccount;
+//    }
 
     @PrePersist
     public void onCreate(){

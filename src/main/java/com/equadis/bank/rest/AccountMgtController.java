@@ -20,8 +20,12 @@ import java.net.URI;
 
 @RestController
 public class AccountMgtController {
-    @Autowired
-    private BankAccountService bankAccountService;
+    private final BankAccountService bankAccountService;
+
+    public AccountMgtController(BankAccountService bankAccountService) {
+        this.bankAccountService = bankAccountService;
+    }
+
     @PostMapping("/create-account")
     public ResponseEntity<?> createNewBankAccount(@RequestBody() BankAccountDto bankAccountDto, BindingResult bindingResult){
 

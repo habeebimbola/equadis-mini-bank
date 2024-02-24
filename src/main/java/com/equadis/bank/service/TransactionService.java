@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface TransactionService {
 
-    public abstract void setAccountService(BankAccountService bankAccountService);
+//    public abstract void setAccountService(BankAccountService bankAccountService);
     public abstract void createNewTransaction(Double transactionAmount, Integer accountId);
 
     public abstract List<TransactionDto> getTransactionsBy(String searchField);

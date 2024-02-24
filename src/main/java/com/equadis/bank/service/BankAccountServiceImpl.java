@@ -10,11 +10,14 @@ import java.util.Optional;
 
 @Service
 public class BankAccountServiceImpl implements BankAccountService{
-    @Autowired
-    private BankAccountRepo bankAccountRepo;
+    private final BankAccountRepo bankAccountRepo;
+    private final TransactionService transactionService;
 
-    @Autowired
-    private TransactionService transactionService;
+    public BankAccountServiceImpl(BankAccountRepo bankAccountRepo, TransactionService transactionService) {
+        this.bankAccountRepo = bankAccountRepo;
+        this.transactionService = transactionService;
+    }
+
     @Override
     public BankAccountDto createNewBankAccount(Double initialAmount) {
 

@@ -17,8 +17,11 @@ import java.net.URI;
 @RequestMapping("api")
 public class CustomerMgtController {
 
-    @Autowired
-    private CustomerService customerService;
+    private final CustomerService customerService;
+
+    public CustomerMgtController(CustomerService customerService) {
+        this.customerService = customerService;
+    }
 
     @PostMapping("/create-customer")
     public ResponseEntity<CustomerDto> createNewCustomer(@RequestBody() CustomerDto customerDto, BindingResult bindingResult){

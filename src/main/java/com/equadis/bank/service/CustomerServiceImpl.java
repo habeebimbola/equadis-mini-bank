@@ -23,7 +23,7 @@ public class CustomerServiceImpl implements CustomerService{
         }
 
         Customer newCustomer = new Customer( custID, name);
-        newCustomer.setBankAccount(this.createBlankAccount());
+//        newCustomer.setBankAccount(this.createBlankAccount());
         Customer savedCustomer = this.customerRepository.save(newCustomer);
 
         return this.createCustomerDto(savedCustomer);

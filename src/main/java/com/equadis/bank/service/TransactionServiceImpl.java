@@ -14,23 +14,20 @@ import java.util.stream.Collectors;
 @Service
 public class TransactionServiceImpl implements TransactionService{
 
-    @Autowired
-    private TransactionRepo transactionRepo;
+    private final TransactionRepo transactionRepo;
 
-    @Autowired
-    private BankAccountService bankAccountService;
 
-    @Override
-    public void setAccountService(BankAccountService bankAccountService) {
-        this.bankAccountService = bankAccountService;
+    public TransactionServiceImpl(TransactionRepo transactionRepo) {
+        this.transactionRepo = transactionRepo;
     }
+
 
     @Override
     public void createNewTransaction(Double transactionAmount, Integer accountId) {
 
         Transaction newTransaction = new Transaction();
         newTransaction.setTransactionAmount(transactionAmount);
-        newTransaction.setTransactionAccount(bankAccountService.findAccountByNo(accountId));
+        newTransaction.setAccountId(accountId);
 
         this.transactionRepo.save(newTransaction);
 
@@ -44,7 +41,7 @@ public class TransactionServiceImpl implements TransactionService{
             TransactionDto transactionDto = new TransactionDto();
             transactionDto.setTransactionAmount(transaction.getTransactionAmount());
             transactionDto.setTransactionTime(transaction.getCreatedDate());
-            transactionDto.setBankAccountDto(createBankAccountDto( transaction.getTransactionAccount()));
+//            transactionDto.setBankAccountDto(createBankAccountDto( transaction.getTransactionAccount()));
             return transactionDto;
         })).collect(Collectors.toList());
     }

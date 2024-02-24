@@ -19,8 +19,8 @@ public class Transaction {
     @Column(name = "AMOUNT")
     private Double transactionAmount;
 
-    @OneToOne(mappedBy = "id")
-    private BankAccount transactionAccount;
+    @Column(name = "ACCOUNT_ID")
+    private Integer accountId;
 
     @Column(name = "TRANS_DATE")
     @Temporal(value = TemporalType.TIMESTAMP)
@@ -42,12 +42,16 @@ public class Transaction {
         this.transactionAmount = transactionAmount;
     }
 
-    public BankAccount getTransactionAccount() {
-        return transactionAccount;
+    public Integer getAccountId() {
+        return accountId;
     }
 
-    public void setTransactionAccount(BankAccount transactionAccount) {
-        this.transactionAccount = transactionAccount;
+    public void setAccountId(Integer accountId) {
+        this.accountId = accountId;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
     }
 
     public LocalDateTime getCreatedDate() {
