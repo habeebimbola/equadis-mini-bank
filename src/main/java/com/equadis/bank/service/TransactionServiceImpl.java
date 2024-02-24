@@ -2,10 +2,10 @@ package com.equadis.bank.service;
 
 import com.equadis.bank.domain.BankAccount;
 import com.equadis.bank.domain.Transaction;
+import com.equadis.bank.domain.TransactionType;
 import com.equadis.bank.domain.dto.BankAccountDto;
 import com.equadis.bank.domain.dto.TransactionDto;
 import com.equadis.bank.repo.TransactionRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,11 +23,12 @@ public class TransactionServiceImpl implements TransactionService{
 
 
     @Override
-    public void createNewTransaction(Double transactionAmount, Integer accountId) {
+    public void createNewTransaction(Double transactionAmount, Integer accountId, TransactionType transactionType) {
 
         Transaction newTransaction = new Transaction();
         newTransaction.setTransactionAmount(transactionAmount);
         newTransaction.setAccountId(accountId);
+        newTransaction.setTransactionType(transactionType);
 
         this.transactionRepo.save(newTransaction);
 
@@ -41,6 +42,7 @@ public class TransactionServiceImpl implements TransactionService{
             TransactionDto transactionDto = new TransactionDto();
             transactionDto.setTransactionAmount(transaction.getTransactionAmount());
             transactionDto.setTransactionTime(transaction.getCreatedDate());
+            transactionDto.setAccountNo(transaction.getAccountId());
 //            transactionDto.setBankAccountDto(createBankAccountDto( transaction.getTransactionAccount()));
             return transactionDto;
         })).collect(Collectors.toList());

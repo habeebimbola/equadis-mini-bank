@@ -2,13 +2,19 @@ package com.equadis.bank.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 @JsonSerialize
 public class BankAccountDto {
 
+    @NotNull(message = "Bank Account Number Cannot Be Null")
+    @Positive(message = "Bank Account Cannot Be A Negative Number")
     @JsonProperty("accountNo")
     private Integer accountNo;
 
+    @Positive(message = "Account Balance Must Be A Positive Value")
+    @NotNull(message = "Account Balance Cannot Be Null")
     @JsonProperty("balance")
     private Double balance;
 

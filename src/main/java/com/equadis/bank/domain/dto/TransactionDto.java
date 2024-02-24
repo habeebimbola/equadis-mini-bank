@@ -1,21 +1,27 @@
 package com.equadis.bank.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDateTime;
 
-@JsonSerialize
+@JsonDeserialize
 public class TransactionDto {
 
     @JsonProperty("transactionTime")
     private LocalDateTime transactionTime;
 
+    @NotNull(message = "Transaction Amount not set. Please set a transaction amount")
+    @Positive(message = "Transaction amount must be a positive value")
     @JsonProperty("amount")
     private Double transactionAmount;
 
-    @JsonProperty("account")
-    private BankAccountDto bankAccountDto;
+    @NotNull(message = "Please specify transaction account number")
+    @JsonProperty("accountNo")
+    private Integer accountNo;
 
     @JsonProperty("transactionId")
     private Integer transId;
@@ -36,12 +42,12 @@ public class TransactionDto {
         this.transactionAmount = transactionAmount;
     }
 
-    public BankAccountDto getBankAccountDto() {
-        return bankAccountDto;
+    public Integer getAccountNo() {
+        return accountNo;
     }
 
-    public void setBankAccountDto(BankAccountDto bankAccountDto) {
-        this.bankAccountDto = bankAccountDto;
+    public void setAccountNo(Integer accountNo) {
+        this.accountNo = accountNo;
     }
 
     public Integer getTransId() {

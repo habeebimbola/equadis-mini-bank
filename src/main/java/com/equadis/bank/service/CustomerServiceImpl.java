@@ -18,7 +18,7 @@ public class CustomerServiceImpl implements CustomerService{
 
         Customer customer = this.getCustomerByID(custID);
 
-        if (customer.getId() == 0){
+        if (customer.getId() != 0){
             throw new RuntimeException("Customer With Identifier Already Exists"+ custID);
         }
 
@@ -34,7 +34,7 @@ public class CustomerServiceImpl implements CustomerService{
     public Customer getCustomerByID(Integer custID) {
         Customer customer = this.customerRepository.findById(custID);
 
-        if (customer.getUuid() == null){
+        if (customer == null){
             return new Customer(0, "");
         }
         return customer;
@@ -49,6 +49,6 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     private BankAccount createBlankAccount(){
-        return new BankAccount(0D);
+        return new BankAccount(0D,0 );
     }
 }

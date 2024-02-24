@@ -1,39 +1,56 @@
 package com.equadis.bank.rest;
 
+import com.equadis.bank.domain.BankAccount;
 import com.equadis.bank.domain.dto.BankAccountDto;
 import com.equadis.bank.domain.dto.TransactionDto;
+import com.equadis.bank.domain.dto.TransactionStatus;
 import com.equadis.bank.service.BankAccountService;
 import com.equadis.bank.validation.BankAccountError;
 import com.equadis.bank.validation.BankAccountErrorBuilder;
 import com.equadis.bank.validation.TransactionErrorsBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
 @RestController
 public class AccountMgtController {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(AccountMgtController.class);
+
+
     private final BankAccountService bankAccountService;
 
     public AccountMgtController(BankAccountService bankAccountService) {
         this.bankAccountService = bankAccountService;
     }
 
+    @GetMapping("/get-account/{accountNo}")
+    public ResponseEntity<BankAccount> findBankAccount(@PathVariable("accountNo") Integer accountNo ){
+
+        BankAccount bankAccount = this.bankAccountService.findAccountByNo(accountNo);
+
+        if (bankAccount.getId() == null || bankAccount.getAccountNumber() == 0){
+            return ResponseEntity.notFound().header("Account No", +accountNo+ " Provided account not found").build();
+        }
+
+        return ResponseEntity.ok(bankAccount);
+    }
+
     @PostMapping("/create-account")
-    public ResponseEntity<?> createNewBankAccount(@RequestBody() BankAccountDto bankAccountDto, BindingResult bindingResult){
+    public ResponseEntity<?> createNewBankAccount(@Valid() @RequestBody() BankAccountDto bankAccountDto, BindingResult bindingResult){
 
         if(bindingResult.hasErrors()){
             return ResponseEntity.badRequest().body(BankAccountErrorBuilder.fromBindingErrors(bindingResult));
         }
 
-        BankAccountDto bankAccount = this.bankAccountService.createNewBankAccount(bankAccountDto.getBalance());
+        BankAccountDto bankAccount = this.bankAccountService.createNewBankAccount(bankAccountDto.getBalance(), bankAccountDto.getAccountNo() );
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{bankAcctNumber}").buildAndExpand(bankAccount.getAccountNo()).toUri();
 
@@ -42,22 +59,30 @@ public class AccountMgtController {
     }
 
     @PostMapping("/withdraw")
-    public ResponseEntity<?> withdrawFromAccount(@RequestBody() TransactionDto transactionDto, BindingResult bindingResult){
+    public ResponseEntity<?> withdrawFromAccount(@Valid() @RequestBody() TransactionDto transactionDto, BindingResult bindingResult){
+
         if(bindingResult.hasErrors()){
             return ResponseEntity.badRequest().body(TransactionErrorsBuilder.fromBindingErrors(bindingResult));
         }
-        boolean success = this.bankAccountService.withdrawFromAccount(transactionDto.getBankAccountDto().getAccountNo(), transactionDto.getTransactionAmount() );
 
-        return ResponseEntity.ok().build();
+        boolean success = this.bankAccountService.withdrawFromAccount(transactionDto.getAccountNo(), transactionDto.getTransactionAmount());
+
+        if (success){
+            return ResponseEntity.ok(TransactionStatus.SUCCESSFUL);
+        }
+
+        return ResponseEntity.badRequest().body("Could not complete transaction");
 
     }
 
     @PostMapping("/deposit")
-    public ResponseEntity<?> depositIntoAccount(@RequestBody TransactionDto transactionDto, BindingResult bindingResult){
+    public ResponseEntity<?> depositIntoAccount(@Valid() @RequestBody() TransactionDto transactionDto, BindingResult bindingResult){
+
         if(bindingResult.hasErrors()){
             return ResponseEntity.badRequest().build();
         }
-        this.bankAccountService.depositInAccount(transactionDto.getBankAccountDto().getAccountNo(), transactionDto.getTransactionAmount());
+
+        this.bankAccountService.depositInAccount(transactionDto.getAccountNo(), transactionDto.getTransactionAmount());
 
         return ResponseEntity.ok().build();
     }
@@ -66,4 +91,11 @@ public class AccountMgtController {
     public BankAccountError handleException(Exception exception){
         return new BankAccountError(exception.getMessage());
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    public void handleServerException(RuntimeException runtimeException){
+        LOGGER.error( runtimeException.getMessage());
+    }
 }
+
+

@@ -10,7 +10,6 @@ import java.util.UUID;
 @Table(name = "TRANSACTION")
 public class Transaction {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "TRANS_ID")
@@ -25,6 +24,10 @@ public class Transaction {
     @Column(name = "TRANS_DATE")
     @Temporal(value = TemporalType.TIMESTAMP)
     private LocalDateTime createdDate;
+
+    @Enumerated( value = EnumType.STRING)
+    @Column(name = "TRANSACTION_TYPE")
+    public TransactionType transactionType;
 
     public Long getTransactionId() {
         return transactionId;
@@ -65,5 +68,13 @@ public class Transaction {
     @PrePersist
     public void onCreate(){
         this.setCreationDate(LocalDateTime.now());
+    }
+
+    public TransactionType getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(TransactionType transactionType) {
+        this.transactionType = transactionType;
     }
 }
