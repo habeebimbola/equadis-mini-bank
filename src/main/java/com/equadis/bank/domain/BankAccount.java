@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @Table(name = "ACCOUNT")
 public class BankAccount {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")

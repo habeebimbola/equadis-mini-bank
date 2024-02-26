@@ -21,7 +21,7 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
-    @GetMapping("/transaction/{accountNo}")
+    @GetMapping("/transactions/{accountNo}")
     public ResponseEntity<List<TransactionDto>> getAccountTransactions(@PathVariable("accountNo") String accountNo){
 
         return ResponseEntity.ok( this.transactionService.getTransactionsBy(accountNo));
