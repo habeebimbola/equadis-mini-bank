@@ -1,0 +1,34 @@
+version: "1.0"
+services:
+  mini-bank-api:
+    image: mini-bank
+    build:
+      context: .
+    networks:
+      mini-bank-network:
+    environment:
+      - POSTGRES_URL=jdbc:postgresql://mini-bank-db:5432/equadis
+    ports:
+      - "9000:9000"
+    depends_on:
+      - mini-bank-db
+
+  mini-bank-db:
+    image: 'postgres'
+    container_name: mini-bank-db
+#    env_file:
+#      - db.env
+    networks:
+      mini-bank-network:
+    ports:
+      - "15432:5432"
+    environment:
+      - 'POSTGRES_USER=equadis'
+      - 'POSTGRES_PASSWORD=equadis'
+      - 'POSTGRES_DB=equadis'
+
+
+networks:
+  mini-bank-network:
+
+
