@@ -36,6 +36,7 @@ public class BankAccount {
 
     public BankAccount(Double balance, Integer accountNumber, Customer accountOwner) {
         this.balance = balance;
+        this.accountOwner = accountOwner;
         this.accountNumber = accountNumber;
     }
 

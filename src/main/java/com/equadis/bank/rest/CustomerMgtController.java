@@ -8,7 +8,6 @@ import com.equadis.bank.validation.CustomerMgtErrorBuilder;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -45,12 +44,12 @@ public class CustomerMgtController {
     public ResponseEntity<CustomerDto> getCustomer(@PathVariable("id") Integer customerId){
         Customer customer = this.customerService.getCustomerByID(customerId);
 
-        if(customer.getId() == null){
+        if(customer.getCustID() == null){
             return ResponseEntity.notFound().build();
         }
         CustomerDto customerDto = new CustomerDto();
         customerDto.setName(customer.getName());
-        customerDto.setId(customer.getId());
+        customerDto.setId(customer.getCustID());
 
         return ResponseEntity.ok(  customerDto);
 

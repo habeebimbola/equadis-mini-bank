@@ -1,7 +1,6 @@
 package com.equadis.bank.domain;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -11,12 +10,12 @@ import java.util.UUID;
 public class Customer {
 
     @Id
-    @UuidGenerator
-    @Column(name = "UUID")
-    private UUID uuid;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID")
+    private Integer id;
 
     @Column(name = "CUSTOMER_ID")
-    private Integer id;
+    private Integer custID;
 
     @Column(name = "NAME")
     private String name;
@@ -29,25 +28,15 @@ public class Customer {
     @Column(name = "LAST_MODIFIED_DATE")
     private LocalDateTime modifiedDate;
 
-//    @OneToOne(mappedBy = "id")
-//    private BankAccount bankAccount;
-
 
     public Customer() {
     }
 
-    public Customer(Integer id, String name) {
-        this.id = id;
+    public Customer(Integer custID, String name) {
+        this.custID = custID;
         this.name = name;
     }
 
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
 
     public Integer getId() {
         return id;
@@ -55,6 +44,14 @@ public class Customer {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getCustID() {
+        return custID;
+    }
+
+    public void setCustID(Integer custID) {
+        this.custID = custID;
     }
 
     public String getName() {

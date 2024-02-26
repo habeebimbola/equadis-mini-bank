@@ -3,7 +3,6 @@ package com.equadis.bank.rest;
 import com.equadis.bank.domain.BankAccount;
 import com.equadis.bank.domain.Customer;
 import com.equadis.bank.domain.dto.BankAccountDto;
-import com.equadis.bank.domain.dto.CustomerDto;
 import com.equadis.bank.domain.dto.TransactionDto;
 import com.equadis.bank.domain.dto.TransactionStatus;
 import com.equadis.bank.service.BankAccountService;
@@ -56,7 +55,7 @@ public class AccountMgtController {
 
         Customer customer =  this.customerService.getCustomerByID(customerId);
 
-        if(customer.getId() == 0){
+        if(customer.getCustID() == 0){
             return ResponseEntity.badRequest().build();
         }
 
@@ -102,10 +101,10 @@ public class AccountMgtController {
         return new BankAccountError(exception.getMessage());
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public void handleServerException(RuntimeException runtimeException){
-        LOGGER.error( runtimeException.getMessage());
-    }
+//    @ExceptionHandler(RuntimeException.class)
+//    public void handleServerException(RuntimeException runtimeException){
+//        LOGGER.error( runtimeException.getMessage());
+//    }
 }
 
 

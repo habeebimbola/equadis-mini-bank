@@ -18,7 +18,7 @@ public class CustomerServiceImpl implements CustomerService{
 
         Customer customer = this.getCustomerByID(custID);
 
-        if (customer.getId() != 0){
+        if (customer.getCustID() != 0){
             throw new RuntimeException("Customer With Identifier Already Exists"+ custID);
         }
 
@@ -32,7 +32,7 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public Customer getCustomerByID(Integer custID) {
-        Customer customer = this.customerRepository.findById(custID);
+        Customer customer = this.customerRepository.findByCustID(custID);
 
         if (customer == null){
             return new Customer(0, "");
@@ -42,7 +42,7 @@ public class CustomerServiceImpl implements CustomerService{
 
     private CustomerDto createCustomerDto(Customer savedCustomer) {
         CustomerDto customerDto = new CustomerDto();
-        customerDto.setId(savedCustomer.getId());
+        customerDto.setId(savedCustomer.getCustID());
         customerDto.setName(savedCustomer.getName());
         return customerDto;
 
