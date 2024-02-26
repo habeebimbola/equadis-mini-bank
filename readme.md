@@ -12,8 +12,7 @@ logging even eor JPA objects could be implemented to track changes to Object Per
 * API Endpoints defined below would be available at http://localhost:9000 and PostGres SQL Interface Would also be reachable from a Bash Instance connected to it's container instance. User Connection details can be read from docker-compose environment section
 
 
-### This Project Relies On Maven for it's build, so you'd have to run it locally with Maven Wrapper Script
-# as decribed: 
+### This Project Relies On Maven for it's build, so you'd have to run it locally with Maven Wrapper Script as described: 
 * ./mvnw clean spring-boot:run
 
 
@@ -62,6 +61,12 @@ logging even eor JPA objects could be implemented to track changes to Object Per
 * Path parameter id : Integer 
 * API Response: HTTP Status Code 200 for success JSON Schema body {name: String, custID: Integer}
 
-* /equadis-bank/transactions/{accountNo}
+* /equadis-bank/transactions-type/{accountNo}
+* content-type: application/json HTTP Method GET
+* JSON Body Schema {"transType": CREDIT | DEBIT }
+* API Response: HTTP Status Code 200 : JSON Response Schema [{"amount":double, "accountNo": Integer, "transactionId":Integer,"transactionTime":DateTime}]
+
+* /equadis-bank/transactions-by-id/{accountNo}
+* JSON Body Schema {"transId": Integer }
 * content-type: application/json HTTP Method GET
 * API Response: HTTP Status Code 200 : JSON Response Schema [{"amount":double, "accountNo": Integer, "transactionId":Integer,"transactionTime":DateTime}]
