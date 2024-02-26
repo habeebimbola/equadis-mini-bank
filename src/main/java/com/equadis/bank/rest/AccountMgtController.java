@@ -1,10 +1,13 @@
 package com.equadis.bank.rest;
 
 import com.equadis.bank.domain.BankAccount;
+import com.equadis.bank.domain.Customer;
 import com.equadis.bank.domain.dto.BankAccountDto;
+import com.equadis.bank.domain.dto.CustomerDto;
 import com.equadis.bank.domain.dto.TransactionDto;
 import com.equadis.bank.domain.dto.TransactionStatus;
 import com.equadis.bank.service.BankAccountService;
+import com.equadis.bank.service.CustomerService;
 import com.equadis.bank.validation.BankAccountError;
 import com.equadis.bank.validation.BankAccountErrorBuilder;
 import com.equadis.bank.validation.TransactionErrorsBuilder;
@@ -26,9 +29,11 @@ public class AccountMgtController {
 
 
     private final BankAccountService bankAccountService;
+    private final CustomerService customerService;
 
-    public AccountMgtController(BankAccountService bankAccountService) {
+    public AccountMgtController(BankAccountService bankAccountService, CustomerService customerService) {
         this.bankAccountService = bankAccountService;
+        this.customerService = customerService;
     }
 
     @GetMapping("/get-account/{accountNo}")
@@ -43,14 +48,19 @@ public class AccountMgtController {
         return ResponseEntity.ok(bankAccount);
     }
 
-    @PostMapping("/create-account")
-    public ResponseEntity<?> createNewBankAccount(@Valid() @RequestBody() BankAccountDto bankAccountDto, BindingResult bindingResult){
-
+    @PostMapping("/create-account/{custID}")
+    public ResponseEntity<?> createNewBankAccount (@PathVariable("custID") Integer customerId,  @Valid() @RequestBody() BankAccountDto bankAccountDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()){
             return ResponseEntity.badRequest().body(BankAccountErrorBuilder.fromBindingErrors(bindingResult));
         }
 
-        BankAccountDto bankAccount = this.bankAccountService.createNewBankAccount(bankAccountDto.getBalance(), bankAccountDto.getAccountNo() );
+        Customer customer =  this.customerService.getCustomerByID(customerId);
+
+        if(customer.getId() == 0){
+            return ResponseEntity.badRequest().build();
+        }
+
+        BankAccountDto bankAccount = this.bankAccountService.createNewBankAccount(bankAccountDto.getBalance(), bankAccountDto.getAccountNo() ,customer);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{bankAcctNumber}").buildAndExpand(bankAccount.getAccountNo()).toUri();
 

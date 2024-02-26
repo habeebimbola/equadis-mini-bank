@@ -1,6 +1,7 @@
 package com.equadis.bank.service;
 
 import com.equadis.bank.domain.BankAccount;
+import com.equadis.bank.domain.Customer;
 import com.equadis.bank.domain.TransactionType;
 import com.equadis.bank.domain.dto.BankAccountDto;
 import com.equadis.bank.repo.BankAccountRepo;
@@ -19,13 +20,13 @@ public class BankAccountServiceImpl implements BankAccountService{
     }
 
     @Override
-    public BankAccountDto createNewBankAccount(Double initialAmount, Integer accountNumber) {
+    public BankAccountDto createNewBankAccount(Double initialAmount, Integer accountNumber, Customer customer) {
 
         if(initialAmount < 0){
             throw  new RuntimeException("Minimum Account Balance Cannot Be Negative");
         }
 
-        BankAccount newBankAccount = new BankAccount(initialAmount, accountNumber);
+        BankAccount newBankAccount = new BankAccount(initialAmount, accountNumber, customer);
         BankAccount bankAccount = this.bankAccountRepo.save(newBankAccount);
 
         if(bankAccount.getUuid() != null){
@@ -84,7 +85,7 @@ public class BankAccountServiceImpl implements BankAccountService{
 
        Optional<BankAccount> accountOptional = this.bankAccountRepo.findByAccountNumber(accountNo);
 
-        return accountOptional.orElse(new BankAccount(0D, 0));
+        return accountOptional.orElse(new BankAccount(0D, 0, new Customer(0, "") ));
 
     }
 

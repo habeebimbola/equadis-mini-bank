@@ -27,10 +27,14 @@ public class BankAccount {
     @Temporal(value = TemporalType.TIMESTAMP)
     private LocalDateTime createdDate;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    private Customer accountOwner;
+
     public BankAccount() {
     }
 
-    public BankAccount(Double balance, Integer accountNumber) {
+    public BankAccount(Double balance, Integer accountNumber, Customer accountOwner) {
         this.balance = balance;
         this.accountNumber = accountNumber;
     }
@@ -73,6 +77,14 @@ public class BankAccount {
 
     public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public Customer getAccountOwner() {
+        return accountOwner;
+    }
+
+    public void setAccountOwner(Customer accountOwner) {
+        this.accountOwner = accountOwner;
     }
 
     @PrePersist

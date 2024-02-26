@@ -49,6 +49,6 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     private BankAccount createBlankAccount(){
-        return new BankAccount(0D,0 );
+        return new BankAccount(0D,0, new Customer());
     }
 }
