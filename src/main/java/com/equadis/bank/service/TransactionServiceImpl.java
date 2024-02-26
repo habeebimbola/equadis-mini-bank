@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class TransactionServiceImpl implements TransactionService{
+public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepo transactionRepo;
 
@@ -44,6 +44,33 @@ public class TransactionServiceImpl implements TransactionService{
             transactionDto.setTransactionTime(transaction.getCreatedDate());
             transactionDto.setAccountNo(transaction.getAccountId());
 //            transactionDto.setBankAccountDto(createBankAccountDto( transaction.getTransactionAccount()));
+            return transactionDto;
+        })).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TransactionDto> getTransactionsByType(Integer accountId, TransactionType transactionType) {
+
+        return this.transactionRepo.findByAccountIdAndTransactionType(accountId, transactionType).stream().map((transaction -> {
+            TransactionDto transactionDto = new TransactionDto();
+            transactionDto.setAccountNo(transaction.getAccountId());
+            transactionDto.setTransactionAmount(transaction.getTransactionAmount());
+            transactionDto.setTransId(transaction.getTransactionId());
+            transactionDto.setTransactionTime(transaction.getCreatedDate());
+            return transactionDto;
+        })).collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<TransactionDto> getTransactionsByTransactionId(Integer accountId, Integer transactionId) {
+
+        return this.transactionRepo.findByAccountIdAndTransactionId(accountId, transactionId).stream().map((transaction -> {
+            TransactionDto transactionDto = new TransactionDto();
+            transactionDto.setAccountNo(transaction.getAccountId());
+            transactionDto.setTransactionAmount(transaction.getTransactionAmount());
+            transactionDto.setTransId(transaction.getTransactionId());
+            transactionDto.setTransactionTime(transaction.getCreatedDate());
             return transactionDto;
         })).collect(Collectors.toList());
     }

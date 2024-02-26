@@ -1,10 +1,8 @@
 package com.equadis.bank.domain;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "TRANSACTION")
@@ -13,7 +11,7 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "TRANS_ID")
-    private Long transactionId;
+    private Integer transactionId;
 
     @Column(name = "AMOUNT")
     private Double transactionAmount;
@@ -29,11 +27,11 @@ public class Transaction {
     @Column(name = "TRANSACTION_TYPE")
     public TransactionType transactionType;
 
-    public Long getTransactionId() {
+    public Integer getTransactionId() {
         return transactionId;
     }
 
-    public void setTransactionId(Long transactionId) {
+    public void setTransactionId(Integer transactionId) {
         this.transactionId = transactionId;
     }
 

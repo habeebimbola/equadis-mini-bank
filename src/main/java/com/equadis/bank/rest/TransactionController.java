@@ -1,6 +1,8 @@
 package com.equadis.bank.rest;
 
+import com.equadis.bank.domain.TransactionType;
 import com.equadis.bank.domain.dto.BankAccountDto;
+import com.equadis.bank.domain.dto.TransReport;
 import com.equadis.bank.domain.dto.TransactionDto;
 import com.equadis.bank.service.TransactionService;
 import com.equadis.bank.validation.TransactionError;
@@ -14,26 +16,30 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-
 public class TransactionController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(TransactionController.class);
     @Autowired
     private TransactionService transactionService;
 
-    @GetMapping("/transactions/{accountNo}")
-    public ResponseEntity<List<TransactionDto>> getAccountTransactions(@PathVariable("accountNo") String accountNo){
+    @GetMapping("/transactions-type/{accountNo}")
+    public ResponseEntity<List<TransactionDto>> getAccountTransactionsByType(@PathVariable("accountNo") Integer accountNo, @RequestBody() TransReport transReport) {
 
-        return ResponseEntity.ok( this.transactionService.getTransactionsBy(accountNo));
+        return ResponseEntity.ok(this.transactionService.getTransactionsByType(accountNo, transReport.getTransactionType()));
+    }
+
+    @GetMapping("/transactions-by-id/{accountNo}")
+    public ResponseEntity<List<TransactionDto>> getAccountTransactionBy(@PathVariable("accountNo") Integer accountNo, @RequestBody() TransReport transReport) {
+        return ResponseEntity.ok(this.transactionService.getTransactionsByTransactionId(accountNo, transReport.getTransId()));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public TransactionError handleException(Exception exception){
+    public TransactionError handleException(Exception exception) {
         return new TransactionError(exception.getMessage());
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public void handleException(RuntimeException runtimeException){
+    public void handleException(RuntimeException runtimeException) {
         LOGGER.error(runtimeException.getMessage());
     }
 }

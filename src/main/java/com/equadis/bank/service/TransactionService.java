@@ -7,8 +7,12 @@ import java.util.List;
 
 public interface TransactionService {
 
-//    public abstract void setAccountService(BankAccountService bankAccountService);
+    //    public abstract void setAccountService(BankAccountService bankAccountService);
     public abstract void createNewTransaction(Double transactionAmount, Integer accountId, TransactionType transactionType);
 
     public abstract List<TransactionDto> getTransactionsBy(String searchField);
+
+    public abstract List<TransactionDto> getTransactionsByType(Integer accountId, TransactionType transactionType);
+
+    public abstract List<TransactionDto> getTransactionsByTransactionId(Integer accountId, Integer transactionId);
 }
