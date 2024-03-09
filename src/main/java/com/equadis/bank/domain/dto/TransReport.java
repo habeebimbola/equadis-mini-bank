@@ -28,4 +28,7 @@ public class TransReport {
     public void setTransactionType(TransactionType transactionType) {
         this.transactionType = transactionType;
     }
+
+    public TransReport() {
+    }
 }

@@ -37,15 +37,15 @@ public class BankAccountServiceImpl implements BankAccountService{
 
     @Override
     public boolean withdrawFromAccount(Integer accountId, Double amount) {
-        boolean success = false;
+        boolean isSuccessful = false;
         BankAccount bankAccount = this.findAccountByNo(accountId);
 
         if (bankAccount.getAccountNumber() == 0){
-            return success;
+            return isSuccessful;
         }
 
-        if(amount < 0  ){
-            return success;
+        if(amount <= 0  ){
+            return isSuccessful;
 
 //            throw new RuntimeException("Withdrawal Amount Cannot Be Negative Value");
         }
@@ -59,8 +59,8 @@ public class BankAccountServiceImpl implements BankAccountService{
         this.bankAccountRepo.save(bankAccount);
         this.transactionService.createNewTransaction(amount,accountId, TransactionType.DEBIT);
 
-        success = true;
-        return success;
+        isSuccessful = true;
+        return isSuccessful;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class BankAccountServiceImpl implements BankAccountService{
 
         BankAccount bankAccount = this.findAccountByNo(accountId);
 
-        if ( amount < 0){
+        if ( amount <= 0){
             throw new RuntimeException("Invalid Deposit Amount. Negative Values");
         }
 

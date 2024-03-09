@@ -33,4 +33,17 @@ public class BankAccountDto {
     public void setBalance(Double balance) {
         this.balance = balance;
     }
+
+    public BankAccountDto(Integer accountNo, Double balance) {
+        this.accountNo = accountNo;
+        this.balance = balance;
+    }
+
+    public BankAccountDto() {
+    }
+
+    @Override
+    public String toString() {
+        return "{\"accountNo\":" + accountNo +",\"balance\":" + balance + "}";
+    }
 }
